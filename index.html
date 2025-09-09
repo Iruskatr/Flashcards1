@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kids Flashcards</title>
+
+  <style>
+
+    body {
+
+      font-family: Arial, sans-serif;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      height: 100vh;
+
+      background-color: #f9f9f9;
+
+    }
+
+    .card {
+
+      width: 300px;
+
+      height: 300px;
+
+      background-color: #fff;
+
+      border-radius: 20px;
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      align-items: center;
+
+      font-size: 2em;
+
+      font-weight: bold;
+
+      color: #333;
+
+      margin-bottom: 20px;
+
+      padding: 10px;
+
+      cursor: pointer;
+
+    }
+
+    .card:hover {
+
+      background-color: #f0f0f0;
+
+    }
+
+    button {
+
+      padding: 10px 20px;
+
+      font-size: 1em;
+
+      margin: 5px;
+
+      border: none;
+
+      border-radius: 10px;
+
+      cursor: pointer;
+
+      background-color: #4CAF50;
+
+      color: white;
+
+    }
+
+    button:hover {
+
+      background-color: #45a049;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div>
+
+    <div class="card" id="flashcard" onclick="speakWord()">
+
+      <div id="flashWord">Word</div>
+
+    </div>
+
+    <div style="text-align:center;">
+
+      <button onclick="prevCard()">◀ Prev</button>
+
+      <button onclick="nextCard()">Next ▶</button>
+
+    </div>
+
+  </div>
+
+ 
+
+  <script>
+
+    // Preloaded word list
+
+    const flashcards = [
+
+      { word: "it" },
+
+      { word: "in" },
+
+      { word: "is" },
+
+      { word: "I" },
+
+      { word: "a" },
+
+      { word: "the" },
+
+      { word: "was" },
+
+      { word: "to" },
+
+      { word: "go" },
+
+      { word: "that" }
+
+    ];
+
+ 
+
+    let currentIndex = 0;
+
+ 
+
+    function showCard() {
+
+      if (flashcards.length === 0) {
+
+        document.getElementById("flashWord").innerText = "No words added!";
+
+        return;
+
+      }
+
+      const card = flashcards[currentIndex];
+
+      document.getElementById("flashWord").innerText = card.word;
+
+    }
+
+ 
+
+    function nextCard() {
+
+      if (flashcards.length === 0) return;
+
+      currentIndex = (currentIndex + 1) % flashcards.length;
+
+      showCard();
+
+    }
+
+ 
+
+    function prevCard() {
+
+      if (flashcards.length === 0) return;
+
+      currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+
+      showCard();
+
+    }
+
+ 
+
+    function speakWord() {
+  if (flashcards.length === 0) return;
+  const card = flashcards[currentIndex];
+  const utterance = new SpeechSynthesisUtterance(card.word);
+
+  // Speak slower and more clearly
+  utterance.rate = 0.7;   // 1.0 = normal speed, lower = slower
+  utterance.pitch = 1;    // Normal pitch
+
+  // Try to select a female voice if available
+  const voices = speechSynthesis.getVoices();
+  const femaleVoice = voices.find(v => v.name.toLowerCase().includes("female") || v.name.toLowerCase().includes("woman"));
+  if (femaleVoice) {
+    utterance.voice = femaleVoice;
+  }
+
+  speechSynthesis.speak(utterance);
+}
+
+
+ 
+
+    // Show first card initially
+
+    showCard();
+
+  </script>
+
+</body>
+
+</html>
